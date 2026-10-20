@@ -3,7 +3,8 @@
 A working checklist for this skill, paraphrased from John-Michael Keyes, *Carpe Audience: Give Better
 Presentations Despite PowerPoint* (The Keyes Firm, 2011). Page numbers are the book's printed pages.
 This is a reference card, not a substitute for the book: the reasoning, the examples and the stories
-behind every rule are his. Read it.
+behind every rule are his. Read it: it is a free download from the I Love U Guys Foundation,
+<https://iloveuguys.org/downloads/Carpe-Audience.pdf>.
 
 **[E]** marks a rule the book states; **[A]** marks this skill's adaptation for research talks in
 Quarto RevealJS.

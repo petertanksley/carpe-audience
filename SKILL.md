@@ -16,7 +16,8 @@ results: numbers, charts, and the evidence behind them.
 **Backbone:** `references/carpe_rules.md`: the book's 45 operational rules (R1 to R45) with page
 cites, Keyes's 14-step process, a 20-item audit checklist, and his numbers-and-charts patterns.
 
-Read the relevant sections before acting, and cite pages. The book is worth reading in full; this
+Read the relevant sections before acting, and cite pages. The book is a free download from the
+I Love U Guys Foundation (https://iloveuguys.org/downloads/Carpe-Audience.pdf) and worth reading in full; this
 skill paraphrases it and does not reproduce it.
 
 ## The non-negotiables

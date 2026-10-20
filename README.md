@@ -14,8 +14,8 @@ source, slide-scale charts, backup slides for the methods questions, and a hando
 
 The ideas are Keyes's. This skill paraphrases his rules (with page numbers, in
 `references/carpe_rules.md`) so Claude can apply and check them. It does not reproduce the book, and it
-is not affiliated with or endorsed by the author. Read the book: the reasoning and the stories behind
-the rules are the good part.
+is not affiliated with or endorsed by the author. Read the book, a free download from the
+[I Love U Guys Foundation](https://iloveuguys.org/downloads/Carpe-Audience.pdf): the reasoning and the stories behind the rules are the good part.
 
 Built at the ALERRT Center at Texas State University, where Carpe Audience is the house style for talks.
 
