@@ -19,4 +19,6 @@ ok(file.exists(file.path(skill, "assets", "fonts", "BarlowCondensed-ExtraBold.tt
 ok(nzchar(Sys.which("quarto")) || file.exists("/Applications/quarto/bin/quarto"), "Quarto")
 ok(file.exists("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"), "Google Chrome (headless screenshots)")
 ok(nzchar(Sys.getenv("GEMINI_API_KEY")), "GEMINI_API_KEY in ~/.Renviron (images mode only; value not shown)")
+if (!nzchar(Sys.getenv("GEMINI_API_KEY")))
+  cat("       optional: only AI slide images need it; setup steps in the README, \"Setting up AI images\"\n")
 rw <- path.expand("~/.claude/skills/render-word/apa-reference.docx"); ok(file.exists(rw), "render-word house style (optional: handout --docx falls back to pandoc defaults)")

@@ -35,15 +35,32 @@ slides as inline R, and logged to a ledger the audit checks. Optional data floor
 need 20 underlying cases, counts need 10) refuse to put an unreliable or disclosive number on screen; set
 them for your own data's rules.
 
+## Under the hood
+
+The skill is a set of instructions plus a toolkit. Claude does the judgment work; the tools do the
+rendering, the measuring and the checking.
+
+| Layer | Tool | What it does here | Needed? |
+|-------|------|-------------------|---------|
+| Rules | Keyes's *Carpe Audience* (`references/carpe_rules.md`) | The style itself: seven words, no bullets, one font in three sizes, call to action first, stories typed and timed. Every check in the audit cites a page. | Always |
+| Orchestration | Claude Code (`SKILL.md`) | Reads the rules, runs the plan / build / convert / audit conversation, writes the story into the notes, and decides what goes on screen. | Always |
+| Slides | Quarto RevealJS + the bundled theme (`template.qmd`, `carpe.scss`, Barlow Condensed) | Turns Markdown into the deck: black background, white type, top-left registration, one fade transition, all assets embedded so the deck runs offline. | Always |
+| Numbers | R + knitr inline code (`carpe_numbers.R`, `check_numbers.R`) | Pulls every number from a results file with its provenance, formats it the way Keyes puts numbers on screen ("1 in 7", "two-thirds higher"), and logs it so the audit can trace it. | For data talks |
+| Charts | R + ggplot2, ragg, systemfonts (`theme_carpe.R`, `carpe_charts.R`) | Slide-scale charts: one accent on grey, direct labels, motion frames on identical axes, pies built a slice at a time. | For charts |
+| Photos | R + magick (`carpe_images.R`) | Crops a photo so its focal point sits on a thirds line and bakes in a fade-to-black vignette for type to sit on. | For photo slides |
+| AI images | [bananarama](https://github.com/hadley/bananarama) + Google Gemini's image model ("Nano Banana"), via ellmer | Generates slide images from text prompts. The template (`bananarama.yaml`) carries Keyes's image rules and safe-messaging rules for sensitive topics. Costs money per image. | Optional |
+| Audit | R + xml2 / rvest (`audit_deck.R`) | Reads the **rendered** HTML and measures it: words per slide, type sizes, transitions, image resolution, pacing from the runtimes in the notes. | Always |
+| Screenshots | Headless Google Chrome | Captures every slide so layout problems (overflow, type over a face) get seen, not assumed. | Recommended |
+| Handout | pandoc (bundled with Quarto) (`carpe_handout.R`) | Builds Keyes's handout from the deck: notes with action items, every number with its exact value, questions, resources. Markdown or Word. | Optional |
+
 ## Requirements
 
 - [Claude Code](https://claude.com/claude-code)
 - R with the packages listed by `assets/carpe_check_setup.R` (ggplot2, ragg, magick, xml2, dplyr and friends)
 - [Quarto](https://quarto.org) (it bundles pandoc)
 - Google Chrome, for headless slide screenshots
-- Optional, for AI images: the [bananarama](https://github.com/hadley/bananarama) R package and a
-  `GEMINI_API_KEY` in `~/.Renviron`. Generation costs money (roughly $0.07 an image); the skill states the
-  count and cost and asks before every run.
+- Optional, for AI images: the [bananarama](https://github.com/hadley/bananarama) R package and a Google
+  Gemini API key (see "Setting up AI images" below).
 
 ## Install
 
@@ -56,6 +73,31 @@ Rscript ~/.claude/skills/carpe-audience/assets/carpe_check_setup.R --install
 ```
 
 Start a new Claude Code session and run `/carpe-audience plan`, or just ask for a talk.
+
+## Setting up AI images (optional)
+
+Everything except AI image generation works without this. Skip it if you will use your own photos.
+
+1. **Get a key.** Sign in to [Google AI Studio](https://aistudio.google.com/apikey) and create an API key.
+2. **Enable billing, then cap it.** Gemini's image models need a billing-enabled Google Cloud project
+   (check [Google's pricing page](https://ai.google.dev/gemini-api/docs/pricing) for current rates; it
+   has been a few cents an image). Set a **spend cap** on the project in AI Studio so a mistake can't run
+   up a bill.
+3. **Store the key where R finds it,** never in a script, a repo or a chat. In R:
+   `usethis::edit_r_environ()`, add a line `GEMINI_API_KEY=your-key-here`, save, and restart R.
+4. **Install bananarama:** `Rscript ~/.claude/skills/carpe-audience/assets/carpe_check_setup.R --install`
+   installs it with the other packages.
+5. **Test it:**
+
+   ```bash
+   Rscript -e 'ellmer::chat_google_gemini()$chat("pong")'
+   ```
+
+   A reply means the key works. Run this ping before any image batch: when a project hits its spend cap,
+   bananarama can hang silently for about ten minutes instead of failing, and the ping fails at once.
+
+The skill always states the number of images and the estimated cost and asks before it generates
+anything.
 
 ## What's inside
 
