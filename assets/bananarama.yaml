@@ -1,0 +1,49 @@
+# Carpe Audience slide images — bananarama (hadley/bananarama) + Google Gemini ("nano banana")
+#
+# Copy to talks/<name>/bananarama.yaml, edit the images list, then from the talk folder:
+#   Rscript -e 'bananarama::bananarama("bananarama.yaml")'
+# Candidates land in images/candidates/; existing outputs are skipped (append freely, force = TRUE
+# regenerates). Pick winners into images/ and cite them with background-image= on an .image slide.
+#
+# Keyes's image rules (ch. 13-14) are written into the style defaults below: one subject, full
+# bleed, 16:9, focal point on a thirds line, no text, no clip-art look, no cliches.
+#
+# COST: about $0.07 per image, so n: 3 is about $0.21 per slide idea. ALWAYS state the image count
+# and estimated cost and get an explicit yes before running. Requires GEMINI_API_KEY in ~/.Renviron.
+# Ping first; a spend-cap 429 makes bananarama hang silently for ~10 minutes:
+#   Rscript -e 'ellmer::chat_google_gemini()$chat("pong")'
+# Reference images cited as [refs/name] are RESIZED IN PLACE by bananarama; cite copies, never finals.
+#
+# SUICIDE / SAFE MESSAGING (reportingonsuicide.org): when a talk touches suicide, images show ABSENCE,
+# never the act (and remember ABSENCE NEEDS PRESENCE: show the group in use with one gap, not an empty room): no weapons, rope, pills or any method; no head-in-hands despair cliches; no funerals,
+# coffins, casket flags or memorial walls. Add "No weapons, no firearms, no holsters, no duty belts.
+# No visible faces." to the style for police/first-responder scenes (a duty belt carries a gun).
+#
+# Restricted data: an AI image is illustration only. Never prompt with data values, and never
+# let a generated image stand in for a chart.
+
+defaults:
+  style: >
+    Documentary photograph, natural light, shallow depth of field, realistic,
+    muted colour with one strong colour note. A single clear subject placed on
+    a rule-of-thirds line, with generous negative space on the opposite side
+    for large white headline type. Full-bleed composition filling the frame
+    edge to edge. No text, no words, no letters, no logos, no watermarks, no
+    borders or frames. Not clip art, not an illustration, not a stock-photo
+    cliche: no handshakes, no lightbulbs, no puzzle pieces, no people pointing
+    at screens. Respectful, never sensational; no gore, no visible injuries,
+    no identifiable real people.
+  aspect-ratio: "16:9"
+  n: 3
+  seed: 2026          # one shared seed => near-identical candidates; drop it for variety
+
+output-dir: images/candidates/
+
+images:
+  # One entry per slide idea. Name it after the slide; describe the METAPHOR, not the statistic.
+  # Keyes's free-association search (p. 69): napkin word -> association -> concrete image.
+  - name: example-empty-locker
+    description: >
+      An empty police locker room at dawn, one locker door slightly open,
+      a uniform shirt hanging inside, cold blue light from a high window,
+      the locker placed on the left third with dark empty space on the right.

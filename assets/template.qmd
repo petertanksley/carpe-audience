@@ -1,0 +1,168 @@
+---
+title: "A hook, not a label"
+title-slide-attributes:
+  data-background-image: images/placeholder.png
+  data-background-size: cover
+carpe:
+  call-to-action: "One sentence: what the audience will DO after this talk."
+  allies: "Partner organisations that support the action (p. 39)"
+  audience: "Who is in the room, what they already know"
+  format: campfire          # campfire (linear talk) | sweat-lodge (boardroom: menu, two endings)
+  slot-minutes: 20          # the time you are given; planned runtime x 1.10 must fit
+  speaker: "Name · Organisation"   # goes in the notes and handout, not on the first slide (pp. 36, 63)
+  sources: []               # results files hand-typed numbers must trace to (check_numbers.R)
+  constants: []             # definitional numbers (cutoffs, reference lines), not results
+format:
+  revealjs:
+    theme: [default, carpe.scss]
+    css: carpe-fonts.css
+    width: 1280
+    height: 720
+    margin: 0               # photos bleed to the edge; padding lives in carpe.scss
+    center: false           # every layout anchors top-left (pp. 60-61, 91)
+    embed-resources: true
+    transition: fade        # one transition everywhere, 0.5-1 s; no per-slide overrides (p. 91)
+    background-transition: fade
+    transition-speed: default
+    controls: false
+    slide-number: false
+    progress: false
+    incremental: false
+---
+
+```{r}
+#| include: false
+# Carpe helpers: carpe_fig() inserts charts with their word count; facts/numbers come from results.
+carpe <- Sys.getenv("CARPE_SKILL", "~/.claude/skills/carpe-audience")
+source(file.path(carpe, "assets", "theme_carpe.R"))
+source(file.path(carpe, "assets", "carpe_numbers.R"))
+# source("facts.R")   # one carpe_pull() per number; then write numbers as `r n(f$x, "pct")`
+```
+
+## {.medium}
+
+The six layouts
+
+<!--
+  Carpe Audience template (Keyes 2011). Copy this file, carpe.scss, carpe-fonts.css and fonts/ into
+  talks/<name>/. The first slide is a HOOK (title over one image), never a title/author card.
+  Every slide's notes end with a tag line:
+      Type: <Call to Action|Background|Set the Stage|Break|Transition> · Story: <name> · Runtime: <N> s [est]
+  "est" marks a word-count estimate (about 150 wpm); replace it with the stopwatch time after
+  rehearsal (pp. 41, 93). Layout classes: .big .medium .quote .split .power .chart .blank, plus
+  .left-third/.right-third/.left-half/.right-half/.right to put type in a photo's negative space.
+  No slide headings unless the heading IS the point (p. 45). No fragments, no per-slide transitions.
+  This comment sits inside the first slide on purpose: a comment before the first heading renders
+  as a blank slide.
+-->
+
+::: {.notes}
+Type: Transition · Story: Intro · Runtime: 5 s est
+:::
+
+## {.big}
+
+20%
+
+::: {.notes}
+BIG layout: one number. Say the sentence it belongs to; the screen carries only the number.
+Then a human example, then repeat the number (p. 67).
+Type: Background · Story: Intro · Runtime: 20 s est
+:::
+
+## {.medium}
+
+Only one cause stands out
+
+::: {.notes}
+MEDIUM layout: a claim of seven words or fewer.
+Type: Set the Stage · Story: Intro · Runtime: 15 s est
+:::
+
+## {.quote}
+
+> A quote may run longer. Stop talking while it is up.
+
+::: {.notes}
+PAUSE: turn to the screen, read it silently, turn back, then speak and advance (p. 100).
+Type: Break · Story: Intro · Runtime: 15 s est
+:::
+
+## {.left-third background-image="images/placeholder.png" background-size="cover" background-position="70% 50%"}
+
+Words in the dark third
+
+::: {.notes}
+PHOTO: one image, full bleed, focal point on a thirds line (move it with background-position);
+type in the negative space, soft shadow automatic. Vignette the image with carpe_vignette() if the
+type needs more contrast; avoid background-opacity, which washes out the colour.
+Type: Background · Story: Findings · Runtime: 20 s est
+:::
+
+## {.split background-image="images/placeholder_split.jpg" background-size="auto 100%" background-position="left center" background-repeat="no-repeat"}
+
+Seven words, no more, beside it
+
+::: {.notes}
+SPLIT: the photo bleeds across two-thirds; large type in the free third (p. 75). Crop it first:
+carpe_crop(src, aspect = "split", focus = c(x, y)). For a photo on the right add .flip and
+background-position="right center".
+Type: Background · Story: Findings · Runtime: 20 s est
+:::
+
+## {.power}
+
+::: {.items}
+[First]{.off} [Second]{.off} [Third]{.off} [Fourth]{.off}
+:::
+
+::: {.notes}
+POWER LIST, highlight-the-fact (p. 67): topic, then the group with nothing lit, then one slide per
+item lit with its statistic, then the group again. Duplicate slides; never fragments (p. 91).
+Type: Background · Story: Findings · Runtime: 5 s est
+:::
+
+## {.power}
+
+::: {.items}
+[First]{.on} [Second]{.off} [Third]{.off} [Fourth]{.off}
+:::
+
+[00%]{.stat}
+
+::: {.notes}
+Statistic, then a human example, then the statistic again.
+Type: Background · Story: Findings · Runtime: 20 s est
+:::
+
+## {.chart}
+
+`r carpe_fig("images/placeholder_chart.png")`
+
+::: {.notes}
+CHART: one point per chart (theme_carpe() + save_slide_fig()). Would one number do instead (p. 79)?
+Detail goes in the handout or a backup slide.
+Type: Background · Story: Findings · Runtime: 30 s est
+:::
+
+## {.blank}
+
+::: {.notes}
+BLANK: nothing on screen, for media or a deliberate pause (p. 59).
+Type: Break · Story: Findings · Runtime: 5 s est
+:::
+
+## {.medium}
+
+One thing to do Monday
+
+::: {.notes}
+Close on the call to action, never "In summary" and never a bare "Questions?" (p. 45). A callback
+to the opening quote also works (p. 27).
+Type: Call to Action · Story: Close · Runtime: 30 s est
+:::
+
+```{r}
+#| include: false
+carpe_ledger_write()   # <deck>_numbers.csv for check_numbers.R
+```
