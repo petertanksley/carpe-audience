@@ -1,7 +1,7 @@
 ---
 name: carpe-audience
-description: Design, convert, or audit a talk in the Carpe Audience style (John-Michael Keyes, 2011), for academic and practitioner research talks. Slides carry a word, a number, or an image (seven words max, no bullets, white type on black, three sizes, top-left registration); the speaker carries the story in the notes. Builds Quarto RevealJS decks, slide-scale ggplot2 figures (theme_carpe), photo preparation (crop, vignette) and AI slide images via bananarama/Gemini, number provenance checks, and a mechanical deck audit. Use for any talk, panel, briefing, or lecture deck, and when reviewing any talk.
-argument-hint: "[plan | build | convert | audit | figure | images] [deck or project path]"
+description: Design, convert, or audit a talk in the Carpe Audience style (John-Michael Keyes, 2011), for academic and practitioner research talks. Slides carry a word, a number, or an image (seven words max, no bullets, white type on black, three sizes, top-left registration); the speaker carries the story in the notes. Builds Quarto RevealJS decks, slide-scale ggplot2 figures (theme_carpe), photo preparation (crop, vignette) and AI slide images via bananarama/Gemini, number provenance checks, a mechanical deck audit, and closeread scrollytelling pages (a finished deck becomes its own web companion: slides as stickies, notes as the narrative). Use for any talk, panel, briefing, or lecture deck, and when reviewing any talk.
+argument-hint: "[plan | build | convert | audit | scrolly | figure | images] [deck or project path]"
 allowed-tools: ["Read", "Grep", "Glob", "Write", "Edit", "Bash", "AskUserQuestion"]
 ---
 
@@ -72,6 +72,10 @@ Mayer's redundancy finding is the best-supported claim in the book.
 | `carpe_numbers.R` | Numbers by construction: `carpe_pull()` (one value from a results file, with provenance and the data floors checked), `carpe_derive()`, `carpe_number()` / `n()` (slide language: `int`, `pct`, `one_in`, `ratio`, `ratio_words`, `ordinal`, `big_count`, `diff`, ...), `carpe_ledger_write()`. |
 | `check_numbers.R` | Traces every number on screen and in the notes: by construction (the ledger), declared constants, or `carpe: sources:`. Reports ambiguous matches and floor failures. |
 | `bananarama.yaml` | Gemini slide-image template with Keyes's image rules and the safe-messaging rules baked in. |
+| `carpe_scrolly.R` | Deck to scrollytelling page: reads the rendered deck, writes `<deck>_scrolly.qmd` for closeread (every slide a sticky, every notes block the narrative that triggers it, one section per Story, backups as page content), decodes embedded images to `scrolly_assets/`, and lists every narrative block in `<deck>_scrolly_rewrite.md`. |
+| `carpe-scrolly.scss` | The theme for closeread pages: a sticky is a 16:9 frame (`.carpe-slide`) that carries the deck layouts one for one in container-query units; narrative card on black in the lower third. |
+| `template_scrolly.qmd` | Author a scrolly from scratch: one example sticky per layout, chapters per Story, a Backup section, the same `carpe:` YAML. |
+| `audit_scrolly.R` | Mechanical check of the rendered page: every sticky triggered, every trigger resolved, seven words per sticky, no bullets, image width, stubs, the close. |
 
 **New machine?** R packages, Quarto, Chrome and (for images) the Gemini key are per machine: `Rscript ~/.claude/skills/carpe-audience/assets/carpe_check_setup.R [--install]`.
 
@@ -128,6 +132,47 @@ Rscript "$CARPE_SKILL/assets/check_numbers.R" talks/<name>/<deck>.html [--from N
 
 Then review the judgment items the audit lists against the audit checklist in `carpe_rules.md`.
 Treat the score as advisory, not a gate.
+
+### `scrolly`: the talk as a web page
+
+[Closeread](https://closeread.dev) is a Quarto format for scrollytelling: a **sticky** stays on
+screen while the **narrative** scrolls past and triggers it. That is Keyes's split exactly (the slide
+is the headline, the speaker is the story, p. 19), so a finished deck converts almost mechanically:
+each slide becomes a sticky, each notes block becomes the narrative that triggers it, each Story
+becomes a chapter. The result is the talk readable without the speaker: for the people who were
+not in the room, for funders, for a project site. It is not a replacement for the handout, which
+stays a separate document (pp. 103–113).
+
+```bash
+cd talks/<name> && quarto add qmd-lab/closeread --no-prompt      # once per talk directory
+Rscript "$CARPE_SKILL/assets/carpe_scrolly.R" talks/<name>/<deck>.html [--layout overlay-right|sidebar-right|overlay-center] [--css extra.css] [--title-slide keep|skip] [--from N --to M]
+quarto render talks/<name>/<deck>_scrolly.qmd
+Rscript "$CARPE_SKILL/assets/audit_scrolly.R" talks/<name>/<deck>_scrolly.html
+```
+
+What the converter does, and does not do:
+- Reads the **rendered** deck, so every number arrives computed and is unchanged by construction.
+  Images embedded in the deck are written out to `scrolly_assets/`; relative paths stay as they are.
+- Copies each slide's markup into a sticky with the slide's classes, so `.big`, `.power`, `.chart`,
+  photo and split layouts render as they did. A deck with extra CSS passes it with `--css`.
+- Drops the tag lines and beat markers from the notes and uses the rest **verbatim**. It never
+  rewrites. The notes were written to be spoken, so `<deck>_scrolly_rewrite.md` lists every block
+  with its word count and the spoken-prose markers found ("you can see", "this slide", "today"):
+  rewrite each one for a reader, keeping statistic, human example, statistic (p. 67).
+- Backup slides are not stickies: they land after the last chapter as ordinary page content, and
+  `carpe_link()` anchors still jump to them. A custom title slide rarely survives the move; use
+  `--title-slide skip` and let the first chapter open on the hook.
+- Layout: type registers top-left, so the narrative card sits right and low (`overlay-right`).
+  Full-width charts and right-anchored numbers are still partly covered; `sidebar-right` never
+  covers the frame, at the cost of a smaller frame. Mobile is always overlay-center.
+- Press `p` in the browser: presentation mode hides the narrative and the arrow keys step the
+  stickies, so the page doubles as a clicker deck.
+
+Authoring a scrolly from scratch: start from `template_scrolly.qmd`. A sticky keeps the slide rules
+(seven words, no bullets, one picture, one accent) and the narrative is the story and may run long.
+One sticky per point, one section per Story, the first sticky a hook, the last the call to action or
+a callback. `check_numbers.R` does not read scrolly pages yet; numbers written with `n()` are still
+ledgered, so trace them in the deck the page came from.
 
 ### Numbers by construction (every research talk)
 
@@ -313,6 +358,7 @@ prose report circulated in advance and cited by page during the talk** (p. 103).
 
 - Works standalone. A talk-building or talk-review agent can build to these rules and this
   template, and score with `audit_deck.R`, `check_numbers.R` and the audit checklist.
+- A scrolly page is scored with `audit_scrolly.R`; its rewrite list is the first review item.
 - Academic and practitioner talks follow the same rules. Caveats go in the notes, the backup and
   the handout, never on the main line. For practitioner audiences, cut method caveats from the
   slides entirely.

@@ -1,0 +1,159 @@
+---
+title: "A hook, not a label"
+carpe:
+  call-to-action: "One sentence: what the reader will DO after this page."
+  allies: "Partner organisations that support the action (p. 39)"
+  audience: "Who reads this, what they already know"
+  format: campfire          # a scrolly is linear by nature; sweat-lodge material goes in the Backup section
+  speaker: "Name · Organisation"   # goes in the narrative's first block or the end, not on the hook
+  sources: []               # results files hand-typed numbers must trace to (check_numbers.R)
+  constants: []             # definitional numbers (cutoffs, reference lines), not results
+format:
+  closeread-html:
+    theme: [default, carpe-scrolly.scss]
+    css: carpe-fonts.css
+    embed-resources: true
+    remove-header-space: true
+    toc: false
+    cr-section:
+      layout: overlay-right    # type registers top-left, so the narrative card sits right; sidebar-right never covers the frame
+---
+
+```{r}
+#| include: false
+# Carpe helpers: carpe_fig() inserts charts with their word count; facts/numbers come from results.
+carpe <- Sys.getenv("CARPE_SKILL", "~/.claude/skills/carpe-audience")
+source(file.path(carpe, "assets", "theme_carpe.R"))
+source(file.path(carpe, "assets", "carpe_numbers.R"))
+# source("facts.R")   # one carpe_pull() per number; then write numbers as `r n(f$x, "pct")`
+```
+
+<!--
+  Carpe Audience scrolly template (Keyes 2011 + closeread). Copy this file, carpe-scrolly.scss,
+  carpe-fonts.css and fonts/ into talks/<name>/, then once:  quarto add qmd-lab/closeread --no-prompt
+  A STICKY is a slide: a fenced div with an id starting cr- and the class .carpe-slide plus one layout
+  class (.big .medium .quote .power .chart .blank, or a photo with style="background-image:url(...)"
+  and .has-bg plus .left-third/.right-third/.left-half/.right-half/.right/.split). It keeps the slide
+  rules: seven words, no bullets, one picture. The NARRATIVE is the story: the paragraphs that would
+  have been the notes, written for a reader. Each block names its sticky with focus-on. One
+  .cr-section per Story, with the story name as the chapter heading between sections. The first
+  sticky is a hook, the last is the call to action or a callback (pp. 27, 39, 45).
+  Press p in the browser: presentation mode hides the narrative and the arrow keys step the stickies.
+  Audit: Rscript "$CARPE_SKILL/assets/audit_scrolly.R" <page>.html
+-->
+
+## Hook
+
+::: {.cr-section}
+
+::: {#cr-s01 .carpe-slide .has-bg .left-third style="background-image:url('images/placeholder.png'); background-position:70% 50%"}
+Words in the dark third
+:::
+
+::: {focus-on="cr-s01"}
+The first block earns the scroll: a question or a surprise, not the title and the speaker's name.
+Say what the page is about and what the reader will be able to do at the end of it.
+:::
+
+:::
+
+## Findings
+
+::: {.cr-section}
+
+::: {#cr-s02 .carpe-slide .big}
+20%
+:::
+
+::: {focus-on="cr-s02"}
+BIG: one number. The narrative says the sentence it belongs to, then a human example, then the
+number again (p. 67).
+:::
+
+::: {#cr-s03 .carpe-slide .medium}
+Only one cause stands out
+:::
+
+::: {focus-on="cr-s03"}
+MEDIUM: a claim of seven words or fewer. The narrative carries the evidence.
+:::
+
+::: {#cr-s04 .carpe-slide .chart}
+`r carpe_fig("images/placeholder_chart.png")`
+:::
+
+::: {focus-on="cr-s04"}
+CHART: one point per chart (theme_carpe() + save_slide_fig()). Would one number do instead (p. 79)?
+A series of frames on identical axes becomes consecutive stickies, one block each: the scrolly form
+of motion.
+:::
+
+::: {#cr-s05 .carpe-slide .power}
+::: {.items}
+[First]{.off} [Second]{.off} [Third]{.off} [Fourth]{.off}
+:::
+:::
+
+::: {focus-on="cr-s05"}
+POWER LIST, highlight-the-fact (p. 67): the group with nothing lit, then one sticky per item.
+:::
+
+::: {#cr-s06 .carpe-slide .power}
+::: {.items}
+[First]{.on} [Second]{.off} [Third]{.off} [Fourth]{.off}
+:::
+
+[00%]{.stat}
+:::
+
+::: {focus-on="cr-s06"}
+Statistic, then a human example, then the statistic again.
+:::
+
+::: {#cr-s07 .carpe-slide .quote}
+> A quote may run longer. The reader stops here.
+:::
+
+::: {focus-on="cr-s07"}
+QUOTE: the one layout allowed past seven words (p. 100). Keep the narrative short under it.
+:::
+
+::: {#cr-s08 .carpe-slide .blank}
+:::
+
+::: {focus-on="cr-s08"}
+BLANK: a black frame for a deliberate pause before the turn (p. 59).
+:::
+
+:::
+
+## Close
+
+::: {.cr-section}
+
+::: {#cr-s09 .carpe-slide .medium}
+One thing to do Monday
+:::
+
+::: {focus-on="cr-s09"}
+Close on the call to action, never "In summary" and never a bare "Questions?" (p. 45). A callback
+to the opening also works (p. 27). Name the allies who support the action, and say where to start.
+:::
+
+:::
+
+::: {.carpe-backup}
+
+## Backup
+
+### Methods detail {#bk-methods}
+
+Tables, intervals and model detail live here, after the story, for the reader who wants them.
+Link a sticky to it with `carpe_link("bk-methods")` and this heading's id.
+
+:::
+
+```{r}
+#| include: false
+carpe_ledger_write()   # <page>_numbers.csv for check_numbers.R
+```

@@ -21,4 +21,5 @@ ok(file.exists("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"), 
 ok(nzchar(Sys.getenv("GEMINI_API_KEY")), "GEMINI_API_KEY in ~/.Renviron (images mode only; value not shown)")
 if (!nzchar(Sys.getenv("GEMINI_API_KEY")))
   cat("       optional: only AI slide images need it; setup steps in the README, \"Setting up AI images\"\n")
+cr <- dir.exists("_extensions/qmd-lab/closeread"); ok(cr, "closeread in this directory (scrolly mode; per talk: quarto add qmd-lab/closeread --no-prompt)")
 rw <- path.expand("~/.claude/skills/render-word/apa-reference.docx"); ok(file.exists(rw), "render-word house style (optional: handout --docx falls back to pandoc defaults)")
