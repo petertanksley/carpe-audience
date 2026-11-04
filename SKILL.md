@@ -221,7 +221,9 @@ cat(carpe_pie_build(comp, "obs", "cause", focus = "Suicide", whole = sum(comp$ob
 `carpe_motion()` stops if any frame's axes differ from frame 1's, and frame 1's notes open with the
 source-and-validity beat. `carpe_lollipop()` handles estimates against a reference line (ratios
 vs 100), and `carpe_bars()` handles ranked bars. Pass `count = "obs"` to any pattern to enforce
-the floors on the plotted rows.
+the floors on the plotted rows. The template sets `auto-stretch: false`: Reveal stretches only an
+image that is alone in its paragraph, so a chart followed by a backup link would lay out differently
+from its neighbouring frames and jump on advance. `carpe.scss` sizes chart images instead.
 
 In the deck, insert it with `` `r carpe_fig("figures/fig_main.png")` `` on a `.chart` slide, so the
 audit counts its words. Rebuild slide figures from analysis output rather than restyling

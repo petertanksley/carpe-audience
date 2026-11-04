@@ -28,6 +28,7 @@ format:
     slide-number: false
     progress: false
     incremental: false
+    auto-stretch: false   # Reveal stretches only a lone image; a frame with a trailing link would lay out differently. carpe.scss sizes charts.
 ---
 
 ```{r}
