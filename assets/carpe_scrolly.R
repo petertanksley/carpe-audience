@@ -32,7 +32,7 @@ from    <- as.integer(opt("--from", "1")); to <- as.integer(opt("--to", NA))
 extra_css <- opt("--css"); title_mode <- opt("--title-slide", "keep")
 asset_dir <- file.path(dirname(out), "scrolly_assets")
 
-BEAT <- regex("\\[beat\\]|\\[pause\\]|\\[voice\\]|\\bPAUSE:?\\b", ignore_case = TRUE)
+BEAT <- regex("\\[beat\\]|\\[pause\\]|\\[voice\\]|\\[click\\]|\\bPAUSE:[^.\\n]*\\.|\\bPAUSE\\b", ignore_case = TRUE)   # a PAUSE: stage direction goes with its sentence
 TAG  <- regex("\\s*Type:\\s*[A-Za-z ]+?\\s*(?:·|\\|)\\s*Story:.*?Runtime:\\s*[0-9.]+\\s*s(?:\\s*est)?\\.?", ignore_case = TRUE)
 SPOKEN <- c("you can see", "as you see", "on this slide", "this slide", "next slide", "here we", "here is", "here's",
             "look at", "let me", "I'll", "I will", "we're going to", "we are going to", "I'm going to", "right now",
