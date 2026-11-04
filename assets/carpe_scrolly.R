@@ -118,6 +118,7 @@ story[is.na(story)] <- "Opening"
 drop <- c("slide", "level1", "level2", "center", "title-slide", "present", "past", "future", "stack")
 sticky <- function(sl) {
   cls <- setdiff(sl$class, drop); if (sl$has_bg) cls <- c(cls, "has-bg")
+  cls[cls == "quarto-title-block"] <- "carpe-title"   # remove-header-space hides .quarto-title-block anywhere in main
   id  <- sprintf("cr-s%02d", sl$n)
   attr <- paste0("{#", id, " .carpe-slide", if (length(cls)) paste0(" .", cls, collapse = "") else "",
                  if (nzchar(sl$style)) sprintf(' style="%s"', sl$style) else "", "}")

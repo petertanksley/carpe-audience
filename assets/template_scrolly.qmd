@@ -32,7 +32,7 @@ source(file.path(carpe, "assets", "carpe_numbers.R"))
   Carpe Audience scrolly template (Keyes 2011 + closeread). Copy this file, carpe-scrolly.scss,
   carpe-fonts.css and fonts/ into talks/<name>/, then once:  quarto add qmd-lab/closeread --no-prompt
   A STICKY is a slide: a fenced div with an id starting cr- and the class .carpe-slide plus one layout
-  class (.big .medium .quote .power .chart .blank, or a photo with style="background-image:url(...)"
+  class (.big .medium .quote .power .chart .blank .carpe-title, or a photo with style="background-image:url(...)"
   and .has-bg plus .left-third/.right-third/.left-half/.right-half/.right/.split). It keeps the slide
   rules: seven words, no bullets, one picture. The NARRATIVE is the story: the paragraphs that would
   have been the notes, written for a reader. Each block names its sticky with focus-on. One
