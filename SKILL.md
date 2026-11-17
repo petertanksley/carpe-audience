@@ -84,6 +84,26 @@ symlinks, so an old talk keeps rendering the way it did). **After any skill upda
 stale theme copy silently renders old rules (it can, for one, shrink every big number to label
 size). Set `CARPE_SKILL=~/.claude/skills/carpe-audience` for the R helpers.
 
+### Rendering without the skill (vendor it once)
+
+A finished deck should render from its `.qmd` and the project folder alone, because collaborators will not
+have this skill installed. When a talk starts, and again after any skill update you want, run
+
+```bash
+Rscript "$CARPE_SKILL/assets/carpe_vendor.R" talks/<name>      # writes talks/<name>/carpe/assets (mirror) + README
+```
+
+and keep the first chunk's line `if (dir.exists("carpe/assets")) Sys.setenv(CARPE_SKILL = normalizePath("carpe"))`
+(already in `template.qmd`; adjust the path from the `.qmd` to `carpe/`). Every `Sys.getenv("CARPE_SKILL", ...)`
+in the helpers, including ones that source each other, then reads the local copy. What is left at render time is
+R packages and **the numbers**. If `facts.R` pulls from restricted results (`carpe_pull()`), split it:
+`facts_build.R` holds the live pulls (floors enforced) and ends with `saveRDS(f, "facts_frozen.rds")`; a small
+`facts.R` runs the build when the results folder exists and otherwise sources `carpe_numbers.R` and reads the frozen
+file. `CARPE_FROZEN=1` forces the frozen path, which is how to test it. The frozen file should hold only values that
+already passed the floors and appear on slides. Figures built by a separate script from restricted data stay a
+build step; ship the rendered PNGs with the deck. Verify by rendering with `HOME` pointed at an empty folder and
+`CARPE_FROZEN=1`, then diffing the `_numbers.csv` ledger against a normal render.
+
 ## Modes
 
 ### `plan`: before any slides
