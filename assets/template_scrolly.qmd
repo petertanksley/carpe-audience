@@ -22,6 +22,8 @@ format:
 ```{r}
 #| include: false
 # Carpe helpers: carpe_fig() inserts charts with their word count; facts/numbers come from results.
+# A project copy of the helpers (Rscript <skill>/assets/carpe_vendor.R) wins, so the page renders without the skill
+if (dir.exists("carpe/assets")) Sys.setenv(CARPE_SKILL = normalizePath("carpe"))   # path from this .qmd to carpe/
 carpe <- Sys.getenv("CARPE_SKILL", "~/.claude/skills/carpe-audience")
 source(file.path(carpe, "assets", "theme_carpe.R"))
 source(file.path(carpe, "assets", "carpe_numbers.R"))
